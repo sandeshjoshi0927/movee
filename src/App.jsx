@@ -1,5 +1,7 @@
 import { Search } from "./components/Search";
 import { useEffect, useState } from "react";
+import Spinner from "./components/Spinner";
+import MovieCard from "./components/MovieCard";
 
 const token = import.meta.env.VITE_TMDB_API_KEY;
 
@@ -16,25 +18,38 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [movies, setMovies] = useState([]);
 
-  const fetchMovies = () => {
+  const fetchMovies = async () => {
     setIsLoading(true);
+    setError("");
     try {
-      return fetch(`${url}?&page=1&sort_by=popularity.desc`, options)
-        .then((res) => res.json())
-        .then((data) => setData(data.results))
-        .finally(() => setIsLoading(false));
+      const endpoint = `${url}?&page=1&sort_by=popularity.desc`;
+      const response = await fetch(endpoint, options);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch movies");
+      }
+
+      const data = await response.json();
+
+      if (data.response === "False") {
+        setError(data.Error || "Failed to fetch movies");
+        setMovies([]);
+        return;
+      }
+
+      setMovies(data.results);
     } catch (error) {
-      setError(error);
+      console.log(`Error fetching movies: ${error}`);
+      setError("Error fetching movies");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    async function fetchData() {
-      await fetchMovies();
-    }
-    fetchData();
+    fetchMovies();
   }, []);
 
   return (
@@ -56,21 +71,20 @@ const App = () => {
         </section>
 
         {/* all movies */}
-        <section>
+        <section className="all-movies">
           <h1>All Movies</h1>
           {isLoading ? (
-            <p className="text-white">Loading...</p>
+            <Spinner />
           ) : error ? (
             <p className="text-red-500">{error}</p>
           ) : (
-            <div>
-              {data.map((data) => (
-                <div key={data.id} className="text-white">
-                  {data.title}
-                </div>
+            <ul>
+              {movies.map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
               ))}
-            </div>
+            </ul>
           )}
+          {console.log(movies)}
         </section>
       </div>
     </main>
