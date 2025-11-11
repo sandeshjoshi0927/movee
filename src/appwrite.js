@@ -17,10 +17,6 @@ export const updateSearchCount = async (searchTerm, movie) => {
       queries: [Query.equal("searchTerm", searchTerm)],
     });
 
-    if (result) {
-      console.log(result);
-    }
-
     if (result.rows.length > 0) {
       const row = result.rows[0];
 
@@ -47,5 +43,19 @@ export const updateSearchCount = async (searchTerm, movie) => {
     }
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getTrendingMovies = async () => {
+  try {
+    const result = await tablesDb.listRows({
+      databaseId: DATABASE_ID,
+      tableId: TABLE_ID,
+      queries: [Query.limit(5), Query.orderDesc("count")],
+    });
+
+    return result.rows;
+  } catch (err) {
+    console.log(err);
   }
 };
