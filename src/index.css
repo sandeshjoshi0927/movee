@@ -140,6 +140,10 @@
             @apply text-gray-100 font-medium text-base;
         }
     }
+
+    .movie-detail {
+        @apply bg-white
+    }
 }
 
 @utility text-gradient {

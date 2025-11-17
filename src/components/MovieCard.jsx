@@ -1,10 +1,17 @@
-import React from "react";
+import { Link } from "react-router-dom";
 
 const MovieCard = ({
-  movie: { title, vote_average, poster_path, original_language, release_date },
+  movie: {
+    id,
+    title,
+    vote_average,
+    poster_path,
+    original_language,
+    release_date,
+  },
 }) => {
   return (
-    <div className="movie-card">
+    <Link className="movie-card" to={`movie/${id}`}>
       <img
         src={
           poster_path
@@ -34,7 +41,7 @@ const MovieCard = ({
           </p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

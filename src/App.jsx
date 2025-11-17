@@ -4,6 +4,7 @@ import Spinner from "./components/Spinner";
 import MovieCard from "./components/MovieCard";
 import { useDebounce } from "react-use";
 import { getTrendingMovies, updateSearchCount } from "./appwrite";
+import { Link } from "react-router-dom";
 
 const token = import.meta.env.VITE_TMDB_API_KEY;
 
@@ -49,8 +50,6 @@ const App = () => {
       }
 
       setMovies(data.results);
-
-      updateSearchCount();
 
       if (query && data.results.length > 0) {
         updateSearchCount(query, data.results[0]);
@@ -100,10 +99,12 @@ const App = () => {
             <h2>Trending Movies</h2>
             <ul>
               {trendingMovies.map((movie, index) => (
-                <li key={movies.$id}>
-                  <p>{index + 1}</p>
-                  <img src={movie.poster_url} alt={movie.title} />
-                </li>
+                <Link to={`/movie/${movie.movie_id}`} key={movie.$id}>
+                  <li>
+                    <p>{index + 1}</p>
+                    <img src={movie.poster_url} alt={movie.title} />
+                  </li>
+                </Link>
               ))}
             </ul>
           </section>
@@ -123,7 +124,6 @@ const App = () => {
               ))}
             </ul>
           )}
-          {console.log(movies)}
         </section>
       </div>
     </main>

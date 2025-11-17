@@ -9,7 +9,7 @@ const client = new Client().setEndpoint(ENDPOINT).setProject(PROJECT_ID);
 
 const tablesDb = new TablesDB(client);
 
-export const updateSearchCount = async (searchTerm, movie) => {
+export const updateSearchCount = async (searchTerm = "", movie) => {
   try {
     const result = await tablesDb.listRows({
       databaseId: DATABASE_ID,
