@@ -142,7 +142,27 @@
     }
 
     .movie-detail {
-        @apply bg-white
+        @apply container m-auto p-2 space-y-4;
+
+        & .image {
+            @apply grid grid-cols-12 gap-4;
+
+            & .poster {
+                @apply col-span-4 rounded-lg;
+            }
+
+            & .banner {
+                @apply col-span-8 h-full rounded-lg;
+            }
+        }
+
+        & .head {
+            @apply text-white;
+
+            & h2 {
+                @apply font-bold;
+            }
+        }
     }
 }
 
